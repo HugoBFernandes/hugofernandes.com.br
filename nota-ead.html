@@ -43,9 +43,9 @@
 
                 <!-- Prova Presencial -->
                 <div class="col-md-4">
-                    <label for="presencialExam" class="form-label">Prova Presencial (0 a 10):</label>
-                    <input type="number" class="form-control" id="presencialExam" min="0" max="10" step="0.1" required>
-                    <div class="invalid-feedback">Insira um valor entre 0 e 10.</div>
+                    <label for="presencialExam" class="form-label">Prova Presencial (0 a 6):</label>
+                    <input type="number" class="form-control" id="presencialExam" min="0" max="6" step="0.1" required>
+                    <div class="invalid-feedback">Insira um valor entre 0 e 6.</div>
                 </div>
 
                 <!-- Simulado (Opcional) -->
@@ -95,8 +95,8 @@
             const finalExam = parseFloat(finalExamInput.value) || 0;
 
             // Cálculo da Média Parcial
-            let mediaParcial = online + (presencial * 0.6);
-            let detalhes = `Média Parcial = ${online} (Atividades Online) + (${presencial} × 0,6) = ${mediaParcial.toFixed(2)}`;
+            let mediaParcial = online + (presencial);
+            let detalhes = `Média Parcial = ${online} (Atividades Online) + ${presencial} (Prova Presencial) = ${mediaParcial.toFixed(2)}`;
 
             // Adicionar Simulado se aplicável
             if (mediaParcial < 10 && simulado > 0) {
