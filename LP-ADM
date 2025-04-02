@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graduação em Administração EaD - Inscreva-se Agora!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #004080;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .content {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+        }
+        .text {
+            flex: 1;
+            padding-right: 20px;
+        }
+        .form-container {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-container h2 {
+            margin-top: 0;
+        }
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 12px;
+            background-color: #004080;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #003366;
+        }
+        .submit-loading {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Graduação em Administração EaD</h1>
+        <p>Prepare-se para o mercado de trabalho com flexibilidade e qualidade!</p>
+	<h2>**Landing Page teste**</h2>
+	<p>O siste direciona ao passo 3 do Orbita, solicitando os dados pessoais básicos, que no caso, solicita apenas o CPF do candidato</p>
+	<p>Ao finalizar essa etapa, o candidato "entra" no topo do funil e já consta no Órbita</p>
+    </div>
+    <div class="container">
+        <div class="content">
+            <div class="text">
+                <h2>Por que escolher nosso curso?</h2>
+                <ul>
+                    <li>Aulas 100% online com professores qualificados</li>
+                    <li>Flexibilidade para estudar onde e quando quiser</li>
+                    <li>Formação prática para gestão de empresas</li>
+                    <li>Certificado reconhecido pelo MEC</li>
+                    <li>Duração: 4 anos</li>
+                </ul>
+                <p>Com o curso de Administração EaD, você desenvolve habilidades estratégicas para liderar equipes, gerenciar recursos e impulsionar negócios. Ideal para quem busca uma carreira sólida e versátil!</p>
+            </div>
+            <div class="form-container">
+                <h2>Faça sua inscrição!</h2>
+                <p>Preencha o formulário</p>
+                <form id="form-lead" method="POST">
+                    <input type="text" name="firstname" placeholder="Nome" required>
+                    <input type="text" name="lastname" placeholder="Sobrenome" required>
+                    <input type="email" name="email" placeholder="E-mail" required>
+                    <input type="tel" name="phone" placeholder="Telefone (com DDD)" required>
+                    <button type="submit" id="form-button">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="submit-loading">
+        <img src="https://via.placeholder.com/100" alt="Loading...">
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("form-lead");
+            form.action = "https://ead.faesa.br/orbita/subscription/";
+            form.method = "POST";
+        });
+
+        function ltrim(str) {
+            if (!str) return str;
+            return str.replace(/^\s+/g, '');
+        }
+
+        function addQueryStringParameter(url, key, value) {
+            if (!value || value === "null") return url;
+            const separator = url.indexOf('?') !== -1 ? '&' : '?';
+            return url + separator + encodeURIComponent(key) + '=' + encodeURIComponent(value);
+        }
+
+        function encodeBase64(str) {
+            return btoa(str);
+        }
+
+        async function sendForm(event) {
+            event.preventDefault();
+            const form = document.getElementById("form-lead");
+            const formButton = document.getElementById("form-button");
+            formButton.disabled = true;
+
+            try {
+                const firstName = document.querySelector('input[name="firstname"]').value;
+                const lastName = document.querySelector('input[name="lastname"]').value;
+                const cellPhone = document.querySelector('input[name="phone"]').value;
+                const email = document.querySelector('input[name="email"]').value;
+                const trEmail = encodeBase64(email);
+
+                // Campos dinâmicos enviados via POST
+                const fieldsArray = [
+                    { type: "hidden", name: "fullname", value: firstName + ' ' + lastName },
+                    { type: "hidden", name: "cellphone", value: ltrim(cellPhone.replace('+55', '').replace(/\s/g, '')) },
+                    { type: "hidden", name: "allowChangeCampus", value: true },
+                    { type: "hidden", name: "course", value: "107_1-01" }, // Curso Administração
+                    { type: "hidden", name: "pole", value: "107-04" }, // Local Linhares
+                    { type: "hidden", name: "skipStepChoseCourse", value: true } // Pular escolha do curso
+                ];
+
+                fieldsArray.forEach(field => {
+                    const input = document.createElement("input");
+                    input.type = field.type;
+                    input.name = field.name;
+                    input.value = field.value;
+                    form.appendChild(input);
+                });
+
+                // Parâmetros fixos no action
+                form.action = addQueryStringParameter(form.action, "education_level", "GRD");
+                form.action = addQueryStringParameter(form.action, "fbclid", "null");
+                form.action = addQueryStringParameter(form.action, "gclid", "null");
+
+                // Parâmetros UTM
+                const utms = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_group'];
+                utms.forEach(utm => {
+                    const utmValue = new URLSearchParams(window.location.search).get(utm) || 'not_set';
+                    form.action = addQueryStringParameter(form.action, utm, utmValue);
+                });
+
+                // Parâmetros adicionais no action (fallback)
+                form.action = addQueryStringParameter(form.action, "tr_email", trEmail);
+                form.action = addQueryStringParameter(form.action, "session_id_ga", "1743599066");
+                form.action = addQueryStringParameter(form.action, "clientid_ga", "1080391791.1737732024");
+                form.action = addQueryStringParameter(form.action, "course", "107_1-01"); // Fallback na URL
+                form.action = addQueryStringParameter(form.action, "pole", "107-04"); // Fallback na URL
+
+                // Exibe o loading
+                document.querySelector('.submit-loading').style.display = 'flex';
+
+                // Envia o formulário
+                console.log("Action final:", form.action);
+                form.submit();
+
+            } catch (error) {
+                console.error("Erro ao enviar o formulário:", error);
+                formButton.disabled = false;
+                document.querySelector('.submit-loading').style.display = 'none';
+            }
+        }
+
+        document.getElementById("form-lead").addEventListener("submit", sendForm);
+    </script>
+</body>
+</html>
