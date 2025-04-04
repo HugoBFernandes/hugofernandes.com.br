@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração EAD - FAESA</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .logo-section .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .logo-section img {
+            max-width: 150px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to right, #003366, #00509d);
+            color: white;
+            padding: 60px 20px;
+            text-align: left;
+        }
+
+        .hero .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+        }
+
+        /* Price Banner */
+        .price-banner {
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            width: 250px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .price-banner p {
+            margin: 5px 0;
+        }
+
+        .price-banner .old-price {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .price-banner .new-price {
+            color: #ff6600;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .price-banner .info {
+            font-size: 0.9rem;
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .price-banner .info i {
+            margin-right: 5px;
+        }
+
+        .price-banner .cta-button {
+            background: #ff6600;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .price-banner .secondary-button {
+            background: #00509d;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Responsive Price Banner */
+        @media (max-width: 768px) {
+            .price-banner {
+                position: relative;
+                margin: 20px auto;
+                right: auto;
+                top: auto;
+                width: 90%;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+
+        /* Content Sections */
+        .content-section {
+            max-width: 800px;
+            margin: 0 auto 40px auto;
+            text-align: left;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-section h2 {
+            color: #003366;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .content-section h2.clickable {
+            cursor: pointer;
+        }
+
+        .content-section p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-content .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .modal-content h2 {
+            color: #003366;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        /* Matriz Curricular Styling */
+        .modal-content .contentModule {
+            margin-bottom: 20px;
+        }
+
+        .modal-content h3 {
+            color: #003366;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .modal-content .sectionTable {
+            margin-bottom: 15px;
+        }
+
+        .modal-content .titleTable {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-content .titleTable h4 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #ff6600;
+        }
+
+        .modal-content .titleTable h5 {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .modal-content .contentTable ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .modal-content .contentTable li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-content .contentTable li:last-child {
+            border-bottom: none;
+        }
+
+        /* Form Modal Styling */
+        .form-modal .modal-content {
+            max-width: 400px;
+            position: relative;
+        }
+
+        .form-modal input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-modal button {
+            background: #ff6600;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Loading Indicator */
+        .submit-loading {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .submit-loading::after {
+            content: '';
+            width: 40px;
+            height: 40px;
+            border: 4px solid #ff6600;
+            border-top: 4px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .matriz-button {
+            background: #00509d;
+            /* Matches the secondary-button color */
+            color: white;
+            padding: 10px 20px;
+            /* Slightly larger padding for better appearance */
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            /* Slightly larger font for emphasis */
+            cursor: pointer;
+            display: inline-block;
+            /* Ensures it behaves like a button in the content section */
+            margin-top: 10px;
+            /* Adds some spacing above the button */
+            transition: background 0.3s ease;
+            /* Smooth hover transition */
+        }
+
+        .matriz-button:hover {
+            background: #003366;
+            /* Darker shade on hover for better UX */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Logo Section -->
+    <div class="logo-section">
+        <div class="container">
+            <img src="https://irp.cdn-website.com/9ea22401/dms3rep/multi/faesa-logo-svg.svg" alt="Logo da Instituição">
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container">
+            <h1>Administração EAD</h1>
+            <p>Os graduados em Administração estão preparados para gerenciar organizações e tomar decisões estratégicas,
+                impulsionando o sucesso empresarial.</p>
+        </div>
+    </header>
+
+    <!-- Price Banner -->
+    <div class="price-banner">
+        <p>Mensalidade (R$)</p>
+        <p class="old-price">De: R$ 399,35</p>
+        <p class="new-price">Por: R$ 149,00</p>
+        <p class="info"><i class="bi bi-clock"></i>Duração: 4 anos</p>
+        <p class="info"><i class="bi bi-display"></i>Aulas 100% online</p>
+        <p class="info"><i class="bi bi-geo-alt"></i>Provas presenciais</p>
+        <p class="info"><i class="bi bi-check-circle"></i>Certificado aprovado pelo MEC</p>
+        <p class="info"><i class="bi bi-geo-fill"></i><b>Oferta Especial para Linhares</b></p>
+        <button class="cta-button" onclick="showFormModal()">Inscreva-se</button>
+        <button class="secondary-button">Tire suas dúvidas</button>
+    </div>
+
+    <!-- Sobre o Curso -->
+    <section class="content-section">
+        <h2>Sobre o curso</h2>
+        <p>Com nota máxima no Enade, o curso de Administração EAD da FAESA tem tradição em desenvolver as habilidades
+            dos alunos e transformá-los em administradores multiespecialistas, com visão de negócio, perfil empreendedor
+            e preparados para liderar e gerenciar resultados.</p>
+        <p>Você aprenderá sobre gestão de empresa, organização de processos, planejamentos estratégicos, finanças,
+            marketing, recursos humanos, vendas e inovação em aulas teóricas e práticas, que acontecem por meio de
+            parcerias entre a universidade e empresas, estágios, visitas técnicas e projetos de aprendizado.</p>
+        <p>Mude o seu futuro e conquiste uma formação ampla, que pode ser aplicada em diversos contextos!</p>
+    </section>
+
+    <!-- Áreas de Atuação -->
+    <section class="content-section">
+        <h2>Áreas de atuação</h2>
+        <p>Administração geral, gestão financeira, marketing, empreendedorismo e mais.</p>
+    </section>
+
+    <!-- Matriz Curricular -->
+    <section class="content-section">
+        <h2>Matriz Curricular</h2>
+        <p>Conhecça todas as disciplinas que você irá cursar</p>
+        <button class="secondary-button matriz-button" onclick="showMatrizModal()">Ver Matriz Curricular</button>
+    </section>
+
+    <!-- Matriz Curricular Modal -->
+    <div class="modal" id="matriz-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeMatrizModal()">×</span>
+            <h2>Matriz curricular</h2>
+            <div class="contentModule">
+                <h3>1º Semestre</h3>
+                <div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 1</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Matemática Básica <strong>80 HORAS</strong></li>
+                                <li>DI | Teoria da Administração <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador I-A <strong>40 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 2</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Contabilidade Básica <strong>80 HORAS</strong></li>
+                                <li>DI | Direito <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador I-B <strong>40 HORAS</strong></li>
+                                <li>CARGA HORÁRIA TOTAL DO SEMESTRE <strong>400 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contentModule">
+                <h3>2º Semestre</h3>
+                <div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 3</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Matemática Aplicada <strong>80 HORAS</strong></li>
+                                <li>DI | Sociologia <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador II-A <strong>40 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 4</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Raciocínio Lógico 80 HORAS</li>
+                                <li>DI | Estatística e Análise de Dados <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador II-B <strong>40 HORAS</strong></li>
+                                <li>CARGA HORÁRIA TOTAL DO SEMESTRE: <strong>400 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contentModule">
+                <h3>3º Semestre</h3>
+                <div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 5</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Matemática Financeira <strong>80 HORAS</strong></li>
+                                <li>DI | Legislação Tributária <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador III-A <strong>40 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 6</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Mercado de Capitais <strong>80 HORAS</strong></li>
+                                <li>DI | Fundamentos da Economia <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador III-B <strong>40 HORAS</strong></li>
+                                <li>CARGA HORÁRIA TOTAL DO SEMESTRE: <strong>400 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contentModule">
+                <h3>4º Semestre</h3>
+                <div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 7</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Organização, Sistemas e Métodos <strong>80 HORAS</strong></li>
+                                <li>DI | Administração de Marketing <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador IV-A <strong>40 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 8</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Sistemas de Informação para Gestão <strong>80 HORAS</strong></li>
+                                <li>DI | Gestão de Custos <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador IV-B <strong>40 HORAS</strong></li>
+                                <li>CARGA HORÁRIA TOTAL DO SEMESTRE: <strong>400 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contentModule">
+                <h3>5º Semestre</h3>
+                <div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 9</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Fundamentos da Logística <strong>80 HORAS</strong></li>
+                                <li>DI | Planejamento Estratégico <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador V-A <strong>40 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 10</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Simulação Comercial <strong>80 HORAS</strong></li>
+                                <li>DI | Comportamento Organizacional <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador V-B <strong>40 HORAS</strong></li>
+                                <li>CARGA HORÁRIA TOTAL DO SEMESTRE: <strong>400 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contentModule">
+                <h3>6º Semestre</h3>
+                <div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 11</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Administração Financeira <strong>80 HORAS</strong></li>
+                                <li>DI | Administração de Materiais <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador VI-A <strong>40 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 12</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Administração de Produção <strong>80 🙂HORAS</strong></li>
+                                <li>DI | Mapeamento e Modulagem de Processos <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador VI-B <strong>40 HORAS</strong></li>
+                                <li>CARGA HORÁRIA TOTAL DO SEMESTRE: <strong>400 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contentModule">
+                <h3>7º Semestre</h3>
+                <div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 13</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Pesquisa Aplicada <strong>80 HORAS</strong></li>
+                                <li>DI | Gestão Estratégica de Pessoas <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador VII-A <strong>40 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 14</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Gestão de Projetos <strong>80 HORAS</strong></li>
+                                <li>DI | Sistemas de Produção <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador VII-B <strong>40 HORAS</strong></li>
+                                <li>CARGA HORÁRIA TOTAL DO SEMESTRE: <strong>400 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="contentModule">
+                <h3>8º Semestre</h3>
+                <div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 15</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Empreendedorismo <strong>80 HORAS</strong></li>
+                                <li>DI | Administração de Micro e Pequenas Empresas <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador VIII-A <strong>40 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="sectionTable">
+                        <div class="titleTable">
+                            <h4>MÓDULO 16</h4>
+                            <h5>Carga Horária</h5>
+                        </div>
+                        <div class="contentTable">
+                            <ul class="rteBlock defaultList">
+                                <li>DI | Optativa <strong>80 HORAS</strong></li>
+                                <li>DI | Elaboração do Projeto de Graduação <strong>80 HORAS</strong></li>
+                                <li>PI | Projeto Integrador VIII-B <strong>40 HORAS</strong></li>
+                                <li>CARGA HORÁRIA TOTAL DO SEMESTRE: <strong>400 HORAS</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Modal -->
+    <div class="modal form-modal" id="form-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeFormModal()">×</span>
+            <h2>Faça sua inscrição!</h2>
+            <p>Preencha o formulário</p>
+            <form id="form-lead" method="POST">
+                <input type="text" name="firstname" placeholder="Nome" required>
+                <input type="text" name="lastname" placeholder="Sobrenome" required>
+                <input type="email" name="email" placeholder="E-mail" required>
+                <input type="tel" name="phone" placeholder="Telefone (com DDD)" required>
+                <button type="submit" id="form-button">Enviar</button>
+            </form>
+            <div class="submit-loading"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Matriz Modal
+        function showMatrizModal() {
+            var modal = document.getElementById('matriz-modal');
+            modal.style.display = 'flex';
+        }
+
+        function closeMatrizModal() {
+            var modal = document.getElementById('matriz-modal');
+            modal.style.display = 'none';
+        }
+
+        // Form Modal
+        function showFormModal() {
+            var modal = document.getElementById('form-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.querySelector('input').focus();
+            }, 50);
+        }
+
+        function closeFormModal() {
+            var modal = document.getElementById('form-modal');
+            modal.style.display = 'none';
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function (event) {
+            var matrizModal = document.getElementById('matriz-modal');
+            var formModal = document.getElementById('form-modal');
+            if (event.target == matrizModal) {
+                matrizModal.style.display = 'none';
+            }
+            if (event.target == formModal) {
+                formModal.style.display = 'none';
+            }
+        }
+    </script>
+
+    <!-- Form Submission Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("form-lead");
+            form.action = "https://ead.faesa.br/orbita/subscription/";
+            form.method = "POST";
+        });
+
+        function ltrim(str) {
+            if (!str) return str;
+            return str.replace(/^\s+/g, '');
+        }
+
+        function addQueryStringParameter(url, key, value) {
+            if (!value || value === "null") return url;
+            const separator = url.indexOf('?') !== -1 ? '&' : '?';
+            return url + separator + encodeURIComponent(key) + '=' + encodeURIComponent(value);
+        }
+
+        function encodeBase64(str) {
+            return btoa(str);
+        }
+
+        async function sendForm(event) {
+            event.preventDefault();
+            const form = document.getElementById("form-lead");
+            const formButton = document.getElementById("form-button");
+            formButton.disabled = true;
+
+            try {
+                const firstName = document.querySelector('input[name="firstname"]').value;
+                const lastName = document.querySelector('input[name="lastname"]').value;
+                const cellPhone = document.querySelector('input[name="phone"]').value;
+                const email = document.querySelector('input[name="email"]').value;
+                const trEmail = encodeBase64(email);
+
+                // Campos dinâmicos enviados via POST
+                const fieldsArray = [
+                    { type: "hidden", name: "fullname", value: firstName + ' ' + lastName },
+                    { type: "hidden", name: "cellphone", value: ltrim(cellPhone.replace('+55', '').replace(/\s/g, '')) },
+                    { type: "hidden", name: "allowChangeCampus", value: true },
+                    { type: "hidden", name: "course", value: "107_1-01" }, // Curso Administração
+                    { type: "hidden", name: "pole", value: "107-04" }, // Local Linhares
+                    { type: "hidden", name: "skipStepChoseCourse", value: true } // Pular escolha do curso
+                ];
+
+                fieldsArray.forEach(field => {
+                    const input = document.createElement("input");
+                    input.type = field.type;
+                    input.name = field.name;
+                    input.value = field.value;
+                    form.appendChild(input);
+                });
+
+                // Parâmetros fixos no action
+                form.action = addQueryStringParameter(form.action, "education_level", "GRD");
+                form.action = addQueryStringParameter(form.action, "fbclid", "null");
+                form.action = addQueryStringParameter(form.action, "gclid", "null");
+
+                // Parâmetros UTM
+                const utms = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_group'];
+                utms.forEach(utm => {
+                    const utmValue = new URLSearchParams(window.location.search).get(utm) || 'not_set';
+                    form.action = addQueryStringParameter(form.action, utm, utmValue);
+                });
+
+                // Parâmetros adicionais no action (fallback)
+                form.action = addQueryStringParameter(form.action, "tr_email", trEmail);
+                form.action = addQueryStringParameter(form.action, "session_id_ga", "1743599066");
+                form.action = addQueryStringParameter(form.action, "clientid_ga", "1080391791.1737732024");
+                form.action = addQueryStringParameter(form.action, "course", "107_1-01"); // Fallback na URL
+                form.action = addQueryStringParameter(form.action, "pole", "107-04"); // Fallback na URL
+
+                // Exibe o loading
+                document.querySelector('.submit-loading').style.display = 'flex';
+
+                // Envia o formulário
+                console.log("Action final:", form.action);
+                form.submit();
+
+            } catch (error) {
+                console.error("Erro ao enviar o formulário:", error);
+                formButton.disabled = false;
+                document.querySelector('.submit-loading').style.display = 'none';
+            }
+        }
+
+        document.getElementById("form-lead").addEventListener("submit", sendForm);
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</body>
+
+</html>
