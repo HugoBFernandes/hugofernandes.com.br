@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Custo de Disciplinas</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .result-container {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            display: none;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .discipline-container {
+            border: 1px solid #dee2e6;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+        }
+        .remove-discipline {
+            color: #dc3545;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h3 class="text-center mb-4">Simulador de Custo de Disciplinas</h3>
+            <form id="feeCalculatorForm" novalidate>
+                <!-- Mensalidade -->
+                <div class="mb-3">
+                    <label for="monthlyFee" class="form-label">Mensalidade do Curso (R$)</label>
+                    <input type="number" class="form-control" id="monthlyFee" step="0.01" min="0" placeholder="Ex: 320.00" required>
+                    <div class="error-message" id="monthlyFeeError">Por favor, insira um valor válido maior que zero.</div>
+                </div>
+
+                <!-- Mês de Inclusão -->
+                <div class="mb-3">
+                    <label for="month" class="form-label">Mês de Inclusão das Disciplinas</label>
+                    <select class="form-select" id="month" required>
+                        <option value="" disabled selected>Selecione o mês</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                    <div class="error-message" id="monthError">Por favor, selecione um mês.</div>
+                </div>
+
+                <!-- Disciplinas -->
+                <div id="disciplines">
+                    <div class="discipline-container" data-index="1">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6>Disciplina 1</h6>
+                            <i class="bi bi-trash remove-discipline" data-index="1"></i>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Carga Horária</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="hours-1" id="hours40-1" value="40" required>
+                                <label class="form-check-label" for="hours40-1">40 horas</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="hours-1" id="hours80-1" value="80">
+                                <label class="form-check-label" for="hours80-1">80 horas</label>
+                            </div>
+                            <div class="error-message" id="hoursError-1">Por favor, selecione a carga horária.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botão Adicionar Disciplina -->
+                <button type="button" class="btn btn-outline-secondary w-100 mb-3" id="addDiscipline">
+                    <i class="bi bi-plus-circle"></i> Adicionar Nova Disciplina
+                </button>
+
+                <!-- Botão Calcular -->
+                <button type="submit" class="btn btn-primary w-100">Calcular Custo</button>
+            </form>
+
+            <!-- Resultado -->
+            <div class="result-container" id="result">
+                <h5 class="text-success"><i class="bi bi-calculator"></i> Resultado da Simulação</h5>
+                <p><strong>Valor por hora:</strong> R$ <span id="hourlyRate"></span></p>
+                <p><strong>Número de disciplinas:</strong> <span id="disciplineCount"></span></p>
+                <p><strong>Custo total das disciplinas:</strong> R$ <span id="totalCost"></span></p>
+                <p><strong>Número de parcelas:</strong> <span id="installments"></span></p>
+                <p><strong>Valor por parcela:</strong> R$ <span id="installmentValue"></span></p>
+                <p><strong>Meses de pagamento:</strong> <span id="paymentMonths"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS e Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let disciplineCount = 1;
+
+        // Adicionar nova disciplina
+        document.getElementById('addDiscipline').addEventListener('click', function () {
+            disciplineCount++;
+            const disciplinesDiv = document.getElementById('disciplines');
+            const newDiscipline = document.createElement('div');
+            newDiscipline.className = 'discipline-container';
+            newDiscipline.dataset.index = disciplineCount;
+            newDiscipline.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6>Disciplina ${disciplineCount}</h6>
+                    <i class="bi bi-trash remove-discipline" data-index="${disciplineCount}"></i>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Carga Horária</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="hours-${disciplineCount}" id="hours40-${disciplineCount}" value="40" required>
+                        <label class="form-check-label" for="hours40-${disciplineCount}">40 horas</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="hours-${disciplineCount}" id="hours80-${disciplineCount}" value="80">
+                        <label class="form-check-label" for="hours80-${disciplineCount}">80 horas</label>
+                    </div>
+                    <div class="error-message" id="hoursError-${disciplineCount}">Por favor, selecione a carga horária.</div>
+                </div>
+            `;
+            disciplinesDiv.appendChild(newDiscipline);
+        });
+
+        // Remover disciplina
+        document.getElementById('disciplines').addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-discipline')) {
+                const index = e.target.dataset.index;
+                const disciplineDiv = document.querySelector(`.discipline-container[data-index="${index}"]`);
+                if (disciplineCount > 1) {
+                    disciplineDiv.remove();
+                    disciplineCount--;
+                    // Renumerar disciplinas
+                    document.querySelectorAll('.discipline-container').forEach((div, i) => {
+                        const idx = i + 1;
+                        div.dataset.index = idx;
+                        div.querySelector('h6').textContent = `Disciplina ${idx}`;
+                        div.querySelector('.remove-discipline').dataset.index = idx;
+                        const radios = div.querySelectorAll('input[type="radio"]');
+                        radios[0].name = `hours-${idx}`;
+                        radios[0].id = `hours40-${idx}`;
+                        radios[1].name = `hours-${idx}`;
+                        radios[1].id = `hours80-${idx}`;
+                        div.querySelectorAll('label')[0].setAttribute('for', `hours40-${idx}`);
+                        div.querySelectorAll('label')[1].setAttribute('for', `hours80-${idx}`);
+                        div.querySelector('.error-message').id = `hoursError-${idx}`;
+                    });
+                }
+            }
+        });
+
+        // Enviar formulário
+        document.getElementById('feeCalculatorForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Resetar mensagens de erro e resultado
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            const resultContainer = document.getElementById('result');
+            resultContainer.style.display = 'none';
+
+            // Obter valores
+            const monthlyFee = parseFloat(document.getElementById('monthlyFee').value);
+            const month = parseInt(document.getElementById('month').value);
+
+            // Validar mensalidade e mês
+            let isValid = true;
+
+            if (!monthlyFee || monthlyFee <= 0) {
+                document.getElementById('monthlyFeeError').style.display = 'block';
+                isValid = false;
+            }
+            if (!month) {
+                document.getElementById('monthError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validar disciplinas
+            const disciplines = document.querySelectorAll('.discipline-container');
+            const hoursArray = [];
+            disciplines.forEach((discipline, index) => {
+                const hours = parseInt(document.querySelector(`input[name="hours-${index + 1}"]:checked`)?.value);
+                if (!hours) {
+                    document.getElementById(`hoursError-${index + 1}`).style.display = 'block';
+                    isValid = false;
+                } else {
+                    hoursArray.push(hours);
+                }
+            });
+
+            if (!isValid) return;
+
+            // Cálculos
+            const semesterFee = monthlyFee * 6; // Valor do semestre
+            const hourlyRate = semesterFee / 400; // Valor por hora
+            const totalCost = hoursArray.reduce((sum, hours) => sum + (hourlyRate * hours), 0); // Custo total
+
+            // Determinar parcelas com base no mês seguinte
+            let installments, paymentMonths;
+            if (month >= 1 && month <= 5) { // 1º semestre (até maio, para parcelas começarem em junho)
+                installments = 6 - month; // Meses de maio a junho
+                paymentMonths = [];
+                for (let i = month + 1; i <= 6; i++) {
+                    paymentMonths.push(getMonthName(i));
+                }
+            } else if (month >= 7 && month <= 11) { // 2º semestre (até novembro)
+                installments = 12 - month; // Meses de agosto a dezembro
+                paymentMonths = [];
+                for (let i = month + 1; i <= 12; i++) {
+                    paymentMonths.push(getMonthName(i));
+                }
+            } else if (month === 6) { // Inclusão em junho
+                installments = 1;
+                paymentMonths = ['Julho'];
+            } else if (month === 12) { // Inclusão em dezembro
+                installments = 1;
+                paymentMonths = ['Janeiro'];
+            } else {
+                // Caso inválido (não deve ocorrer devido à validação)
+                installments = 0;
+                paymentMonths = [];
+            }
+
+            const installmentValue = installments > 0 ? totalCost / installments : totalCost; // Valor por parcela
+
+            // Exibir resultados
+            document.getElementById('hourlyRate').textContent = hourlyRate.toFixed(2);
+            document.getElementById('disciplineCount').textContent = hoursArray.length;
+            document.getElementById('totalCost').textContent = totalCost.toFixed(2);
+            document.getElementById('installments').textContent = installments;
+            document.getElementById('installmentValue').textContent = installmentValue.toFixed(2);
+            document.getElementById('paymentMonths').textContent = paymentMonths.join(', ');
+            resultContainer.style.display = 'block';
+        });
+
+        // Função para obter nome do mês
+        function getMonthName(month) {
+            const months = [
+                'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+            ];
+            return months[month - 1];
+        }
+    </script>
+</body>
+</html>
