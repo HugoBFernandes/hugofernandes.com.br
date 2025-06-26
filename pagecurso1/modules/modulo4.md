@@ -138,6 +138,8 @@ A escolha da ferramenta correta depende da tarefa pedagógica. As plataformas po
 
 ![Comparação de ferramentas](https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=300&fit=crop)
 
+<div class="table-container">
+
 | Ferramenta | Desenvolvedor | Melhor Caso de Uso Pedagógico | Característica Diferencial Chave | Posição sobre Privacidade de Dados | Principal Limitação |
 |------------|---------------|-------------------------------|-----------------------------------|-------------------------------------|---------------------|
 | **ChatGPT** | OpenAI | Geração de conteúdo criativo, brainstorming e simulação | Ecossistema de GPTs personalizados | Dados podem ser usados para treinamento (planos individuais) | Risco de alucinações; privacidade é uma preocupação |
@@ -147,6 +149,8 @@ A escolha da ferramenta correta depende da tarefa pedagógica. As plataformas po
 | **Perplexity AI** | Perplexity | Projetos de pesquisa, ensino de literacia informacional | Respostas com citações e links para fontes | Foco na transparência das fontes | Menos focado na geração de conteúdo criativo |
 | **DeepSeek** | DeepSeek AI | Tutor para matemática e programação, geração de exercícios STEM | Desempenho de ponta em lógica e codificação | Código aberto; privacidade depende da implementação | Altamente especializado; não ideal para humanidades |
 | **Grok** | xAI | Análise de eventos atuais, tendências de mídia social | Acesso em tempo real aos dados da plataforma X | Dados de interação são coletados e vinculados ao usuário | Tom "rebelde" requer forte moderação do professor |
+
+</div>
 
 ## A Arte e a Ciência da Engenharia de Prompt para Educadores
 
