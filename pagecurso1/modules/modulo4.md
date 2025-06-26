@@ -1,5 +1,5 @@
 ---
-title: O Compasso de IA do Educador 
+title:IA para o Ensino 
 description: Uma Análise Comparativa de Ferramentas de IA Generativa para a Sala de Aula Moderna
 showImages: true
 showVideos: true
