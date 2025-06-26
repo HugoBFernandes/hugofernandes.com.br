@@ -1,6 +1,6 @@
 ---
 title: O Compasso de IA do Educador 
-description: Uma Análise Comparativa Definitiva de Ferramentas de IA Generativa para a Sala de Aula Moderna
+description: Uma Análise Comparativa de Ferramentas de IA Generativa para a Sala de Aula Moderna
 showImages: true
 showVideos: true
 showReferences: true
