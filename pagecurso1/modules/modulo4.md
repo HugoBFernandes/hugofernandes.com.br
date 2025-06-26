@@ -21,7 +21,7 @@ A integração da Inteligência Artificial (IA) no setor educacional representa 
 
 Este relatório oferece uma análise exaustiva e comparativa das principais ferramentas de IA generativa disponíveis, contextualizando suas funcionalidades, custos e implicações éticas para o uso prático e eficaz por professores em suas rotinas diárias.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/hJP5GqnTrNo" title="AI in Education" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/hJP5GqnTrNo?si=zQxcNfVHU75V0ZCz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ## O Imperativo da Economia de Tempo: Lidando com a Carga de Trabalho Docente
 
@@ -238,7 +238,7 @@ A IA deve ser uma ferramenta para aumentar, e não substituir, o professor. O ob
 
 **O futuro é uma poderosa parceria entre o professor e a tecnologia.**
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/t4kyRyKyOpo" title="Future of AI in Education" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/t4kyRyKyOpo?si=i5aSeDgjMTt6eMka" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 ---
 
