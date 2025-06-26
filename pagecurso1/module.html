@@ -1,94 +1,453 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-// =================================================================
-// versão 4
- // =================================================================
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Módulo de Conteúdo</title>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-yaml/dist/js-yaml.min.js"></script>
-    
+
     <style>
-        /* Todo o seu CSS vai aqui... (o mesmo da versão anterior) */
-        body { font-family: sans-serif; /* ... */ }
+        /* =================================================================
+           1. DEFINIÇÃO DAS VARIÁVEIS DE COR E PALETAS
+           ================================================================= */
+        :root {
+            /* Paleta Padrão (Default) */
+            --cor-destaque-default: #667eea;
+            --cor-destaque-gradiente-default: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+            /* Paleta Floresta (Forest) */
+            --cor-destaque-forest: #4CAF50;
+            --cor-destaque-gradiente-forest: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+
+            /* Paleta Oceano (Ocean) */
+            --cor-destaque-ocean: #00BCD4;
+            --cor-destaque-gradiente-ocean: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);
+
+            /* Paleta Entardecer (Sunset) */
+            --cor-destaque-sunset: #ff9800;
+            --cor-destaque-gradiente-sunset: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+
+            /* Define a paleta ativa (inicialmente a padrão) */
+            --cor-destaque: var(--cor-destaque-default);
+            --cor-destaque-gradiente: var(--cor-destaque-gradiente-default);
+        }
+
+        /* Aplica a paleta de cor escolhida pelo usuário */
+        body[data-palette="default"] {
+            --cor-destaque: var(--cor-destaque-default);
+            --cor-destaque-gradiente: var(--cor-destaque-gradiente-default);
+        }
+
+        body[data-palette="forest"] {
+            --cor-destaque: var(--cor-destaque-forest);
+            --cor-destaque-gradiente: var(--cor-destaque-gradiente-forest);
+        }
+
+        body[data-palette="ocean"] {
+            --cor-destaque: var(--cor-destaque-ocean);
+            --cor-destaque-gradiente: var(--cor-destaque-gradiente-ocean);
+        }
+
+        body[data-palette="sunset"] {
+            --cor-destaque: var(--cor-destaque-sunset);
+            --cor-destaque-gradiente: var(--cor-destaque-gradiente-sunset);
+        }
+
+        /* =================================================================
+           2. DEFINIÇÃO DOS TEMAS CLARO E NOTURNO
+           ================================================================= */
+        body {
+            /* Tema Claro (Padrão) */
+            --cor-fundo: #f4f4f9;
+            --cor-fundo-card: #ffffff;
+            --cor-texto-principal: #2c3e50;
+            --cor-texto-secundario: #666;
+            --cor-borda: #eee;
+            --sombra-card: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.7;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-secundario);
+            margin: 0;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body[data-theme="dark"] {
+            /* Tema Noturno (Cores Invertidas) */
+            --cor-fundo: #121212;
+            --cor-fundo-card: #1e1e1e;
+            --cor-texto-principal: #e0e0e0;
+            --cor-texto-secundario: #a0a0a0;
+            --cor-borda: #333;
+            --sombra-card: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* =================================================================
+           3. ESTILOS GERAIS DO MÓDULO (USANDO VARIÁVEIS)
+           ================================================================= */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        #loading,
+        #error {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: var(--cor-texto-secundario);
+        }
+
+        #error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .module-header {
+            background-color: var(--cor-fundo-card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--sombra-card);
+            margin-bottom: 25px;
+            text-align: center;
+            border-top: 5px solid var(--cor-destaque);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .module-header h1 {
+            font-size: 2.8em;
+            margin: 0 0 10px 0;
+            color: var(--cor-texto-principal);
+        }
+
+        .module-header p {
+            font-size: 1.2em;
+            color: var(--cor-texto-secundario);
+            margin: 0;
+        }
+
+        .content-section {
+            background-color: var(--cor-fundo-card);
+            padding: 25px 40px;
+            border-radius: 12px;
+            box-shadow: var(--sombra-card);
+            color: var(--cor-texto-secundario);
+            transition: background-color 0.3s;
+        }
+
+        .content-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .content-section h1,
+        .content-section h2,
+        .content-section h3,
+        .content-section h4 {
+            color: var(--cor-texto-principal);
+        }
+
+        .content-section h2 {
+            border-bottom: 2px solid var(--cor-borda);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        .content-section a {
+            color: var(--cor-destaque);
+            text-decoration: none;
+        }
+
+        .content-section a:hover {
+            text-decoration: underline;
+        }
+
+        .content-section code {
+            background-color: var(--cor-borda);
+            padding: 2px 5px;
+            border-radius: 4px;
+            color: var(--cor-texto-principal);
+        }
+
+        .content-section pre {
+            background-color: var(--cor-borda);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        /* =================================================================
+           4. ESTILOS PARA O SELETOR DE TEMAS
+           ================================================================= */
+        #theme-switcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        #theme-button {
+            width: 50px;
+            height: 50px;
+            background: var(--cor-fundo-card);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        #theme-button:hover {
+            transform: scale(1.1);
+        }
+
+        #theme-panel {
+            position: absolute;
+            bottom: 65px;
+            right: 0;
+            width: 250px;
+            background-color: var(--cor-fundo-card);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+            padding: 15px;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+        }
+
+        #theme-panel.hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+        }
+
+        #theme-panel h4 {
+            margin: 0 0 15px 0;
+            color: var(--cor-texto-principal);
+            border-bottom: 1px solid var(--cor-borda);
+            padding-bottom: 10px;
+        }
+
+        .theme-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .theme-option label {
+            color: var(--cor-texto-secundario);
+            font-size: 14px;
+        }
+
+        .palette-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .palette-box {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            background-clip: content-box;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .palette-box:hover {
+            transform: scale(1.1);
+        }
+
+        .palette-box.active {
+            transform: scale(1.1);
+            border-color: var(--cor-destaque);
+        }
+
+        /* Estilos do Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+
+        input:checked+.slider {
+            background-color: var(--cor-destaque);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        .slider.round {
+            border-radius: 24px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
     </style>
 </head>
+
 <body>
     <div class="main-container">
         <div id="loading">Carregando conteúdo...</div>
         <div id="error" style="display: none;"></div>
-        <div id="content-wrapper" style="display: none;"></div>
+        <div id="content-wrapper" style="display: none;">
+        </div>
     </div>
 
     <div id="theme-switcher">
+        <div id="theme-button" title="Alterar tema e cores">🎨</div>
+        <div id="theme-panel" class="hidden">
+            <h4>Configurações de Tema</h4>
+            <div class="theme-option">
+                <label for="dark-mode-toggle">Modo Noturno</label>
+                <label class="switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="theme-option">
+                <label>Paleta de Cores</label>
+                <div class="palette-options">
+                    <button class="palette-box" data-palette="default" style="background-color: #667eea;"
+                        title="Padrão"></button>
+                    <button class="palette-box" data-palette="forest" style="background-color: #4CAF50;"
+                        title="Floresta"></button>
+                    <button class="palette-box" data-palette="ocean" style="background-color: #00BCD4;"
+                        title="Oceano"></button>
+                    <button class="palette-box" data-palette="sunset" style="background-color: #ff9800;"
+                        title="Entardecer"></button>
+                </div>
+            </div>
         </div>
+    </div>
 
     <script>
-        console.log('[DEBUG] Script principal iniciado.');
-
         // =================================================================
-        // LÓGICA DO SELETOR DE TEMAS E CORES (sem alterações)
+        // LÓGICA DO SELETOR DE TEMAS E CORES
         // =================================================================
         const themeButton = document.getElementById('theme-button');
-        // ... (resto do código do seletor de temas) ...
+        const themePanel = document.getElementById('theme-panel');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const paletteContainer = document.querySelector('.palette-options');
+
+        function applyTheme(theme) {
+            document.body.dataset.theme = theme;
+            localStorage.setItem('selectedTheme', theme);
+        }
+
+        function applyPalette(palette) {
+            document.body.dataset.palette = palette;
+            localStorage.setItem('selectedPalette', palette);
+            document.querySelectorAll('.palette-box').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.palette === palette);
+            });
+        }
+
+        themeButton.addEventListener('click', () => {
+            themePanel.classList.toggle('hidden');
+        });
+
+        darkModeToggle.addEventListener('change', () => {
+            applyTheme(darkModeToggle.checked ? 'dark' : 'light');
+        });
+
+        paletteContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('palette-box')) {
+                applyPalette(e.target.dataset.palette);
+            }
+        });
+
+        // Aplica as preferências salvas assim que o script é lido
         const savedTheme = localStorage.getItem('selectedTheme') || 'light';
         const savedPalette = localStorage.getItem('selectedPalette') || 'default';
-        // ... (código de aplicação de tema) ...
+        applyTheme(savedTheme);
+        applyPalette(savedPalette);
+        if (savedTheme === 'dark') {
+            darkModeToggle.checked = true;
+        }
 
         // =================================================================
-        // LÓGICA DE CARREGAMENTO DO CONTEÚDO DO MÓDULO (COM DEBUG)
+        // LÓGICA DE CARREGAMENTO DO CONTEÚDO DO MÓDULO
         // =================================================================
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log('[DEBUG] Evento DOMContentLoaded disparado. A página HTML está pronta.');
+
             try {
-                console.log('[DEBUG] Entrando no bloco try...catch para buscar o conteúdo.');
                 const urlParams = new URLSearchParams(window.location.search);
-                const srcPath = urlParams.get('src');
-                
-                console.log('[DEBUG] 1. Caminho extraído do parâmetro "src" da URL:', `"${srcPath}"`);
+                let markdownPath = urlParams.get('src');
 
-
-                if (!srcPath) {
+                if (!markdownPath) {
                     throw new Error('Nenhum arquivo de conteúdo (src) foi especificado na URL.');
                 }
-                
-                // --- LÓGICA DE CAMINHO ROBUSTA COM DEBUG ---
-                const currentPagePath = window.location.pathname;
-                console.log('[DEBUG] 2. Caminho da página atual (window.location.pathname):', `"${currentPagePath}"`);
 
-                const baseDir = currentPagePath.substring(0, currentPagePath.lastIndexOf('/') + 1);
-                console.log('[DEBUG] 3. Diretório base calculado (deve ser /pagecurso1/):', `"${baseDir}"`);
+                // --- INÍCIO DA CORREÇÃO ---
+                // Constrói uma URL absoluta para o arquivo Markdown.
+                // Isso garante que o caminho funcione corretamente tanto localmente
+                // quanto em um subdiretório no GitHub Pages.
+                const absoluteUrl = new URL(markdownPath, window.location.href);
+                // --- FIM DA CORREÇÃO ---
 
-                const fullPath = baseDir + srcPath;
-                console.log('[DEBUG] 4. Caminho FINAL e COMPLETO que será buscado:', `"${fullPath}"`);
-                // --- FIM DA LÓGICA DE CAMINHO ---
-
-                console.log('[DEBUG] 5. Executando o fetch()...');
-                const response = await fetch(fullPath);
-                
-                console.log('[DEBUG] 6. Resposta do fetch recebida. Status:', response.status, response.statusText);
-
-
+                const response = await fetch(absoluteUrl); // Usamos a URL absoluta
                 if (!response.ok) {
-                    // O erro 404 será capturado aqui
-                    throw new Error(`[${response.status}] Não foi possível encontrar o arquivo no caminho: ${fullPath}`);
+                    // Lança um erro mais detalhado, incluindo a URL que falhou.
+                    throw new Error(`[404] Não foi possível encontrar o arquivo no caminho: ${absoluteUrl.pathname}`);
                 }
 
-                console.log('[DEBUG] 7. Sucesso! O arquivo foi encontrado. Lendo o conteúdo...');
+
+
                 const markdownContent = await response.text();
-                
-                // ... (o resto do código para processar o markdown continua aqui)
-                
+
                 const frontMatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
                 const match = markdownContent.match(frontMatterRegex);
                 const metadata = match ? jsyaml.load(match[1]) : {};
                 const content = match ? match[2] : markdownContent;
-                
+
                 document.title = metadata.title || 'Módulo de Conteúdo';
                 const contentHtml = marked.parse(content);
-                
+
                 const moduleHtml = `
                     <div class="module-header">
                         <h1>${metadata.title || ''}</h1>
@@ -96,18 +455,13 @@
                     </div>
                     <div class="content-section">${contentHtml}</div>
                 `;
-                
+
                 document.getElementById('content-wrapper').innerHTML = moduleHtml;
-                
+
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('content-wrapper').style.display = 'block';
-                console.log('[DEBUG] 8. Módulo renderizado na tela com sucesso!');
-
 
             } catch (error) {
-                console.error('[DEBUG] Ocorreu um erro dentro do bloco catch.');
-                console.error('[DEBUG] Objeto do erro:', error);
-
                 const loadingDiv = document.getElementById('loading');
                 const errorDiv = document.getElementById('error');
                 loadingDiv.style.display = 'none';
@@ -117,4 +471,5 @@
         });
     </script>
 </body>
+
 </html>
