@@ -327,6 +327,57 @@
         .slider.round:before {
             border-radius: 50%;
         }
+
+         /* ... (todo o seu CSS existente, da linha 1 até o final da seção do seletor de temas) ... */
+
+    /* =================================================================
+       5. CSS PARA ELEMENTOS RESPONSIVOS (VÍDEOS E TABELAS) - NOVO!
+       ================================================================= */
+
+    /* --- Solução para Vídeos --- */
+    /* Aplica a qualquer iframe dentro da seção de conteúdo */
+    .content-section iframe {
+        max-width: 100%; /* Garante que o vídeo não ultrapasse a largura do contêiner */
+        aspect-ratio: 16 / 9; /* Mantém a proporção de vídeo (16:9) */
+        height: auto; /* A altura se ajustará automaticamente */
+        border-radius: 8px; /* Mantém a consistência visual */
+        border: none; /* Remove bordas que alguns iframes podem ter */
+    }
+
+    /* --- Solução para Tabelas --- */
+    /* O contêiner que permite a rolagem horizontal */
+    .table-container {
+        width: 100%;
+        overflow-x: auto; /* A mágica acontece aqui! */
+        margin: 20px 0;
+        border: 1px solid var(--cor-borda);
+        border-radius: 8px;
+    }
+
+    /* Estilos básicos para a tabela para garantir boa legibilidade */
+    .content-section table {
+        width: 100%;
+        border-collapse: collapse; /* Une as bordas das células */
+        min-width: 600px; /* Força um tamanho mínimo para que a rolagem seja ativada em telas pequenas */
+    }
+
+    .content-section th,
+    .content-section td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--cor-borda);
+    }
+
+    .content-section th {
+        background-color: var(--cor-fundo); /* Leve destaque para o cabeçalho */
+        color: var(--cor-texto-principal);
+        font-weight: 600;
+    }
+
+    .content-section tr:last-of-type td {
+        border-bottom: none; /* Remove a borda da última linha */
+    }
+        
     </style>
 </head>
 
