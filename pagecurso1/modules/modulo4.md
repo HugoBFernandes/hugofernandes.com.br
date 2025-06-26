@@ -62,7 +62,7 @@ A escolha da ferramenta correta depende da tarefa pedagógica. As plataformas po
 
 #### 🤖 ChatGPT (OpenAI): O Inovador Ubíquo
 
-![ChatGPT Interface](https://images.unsplash.com/photo-1676277791608-ac54c4d36e1a?w=400&h=200&fit=crop)
+![ChatGPT Interface]([https://images.unsplash.com/photo-1676277791608-ac54c4d36e1a?w=400&h=200&fit=crop](https://www.researchgate.net/profile/Maad-Mijwil/publication/368788743/figure/fig1/AS:11431281122375185@1677302357712/The-publicly-available-online-interface-for-ChatGPT.png))
 
 **Força:** Geração de textos criativos, brainstorming, simulação de diálogos e ecossistema de GPTs personalizados.
 
