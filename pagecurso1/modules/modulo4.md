@@ -177,12 +177,14 @@ Especifique a estrutura da resposta (ex: "Apresente em uma tabela")
 ![Receitas de prompts](https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=300&fit=crop)
 
 <div class="table-container">
+  
 | Categoria da Tarefa | Tarefa Específica | Modelo de Prompt |
 |---------------------|-------------------|------------------|
 | **Planejamento** | Criar um Plano de Aula (5E) | Aja como um professor experiente de [Disciplina] para o [Nível]. Crie um plano de aula de [Duração] sobre "[Tópico]". O plano deve seguir o modelo 5E (Engajar, Explorar, Explicar, Elaborar, Avaliar) e alinhar-se ao objetivo: "[Objetivo]". |
 | **Diferenciação** | Gerar um Texto Multinível | Pegue o seguinte texto: "[Colar texto]". Reescreva-o para três níveis: (1) Básico, (2) Intermediário e (3) Avançado, ajustando vocabulário e complexidade. |
 | **Avaliação** | Criar uma Rubrica Analítica | Crie uma rubrica em tabela para a tarefa: "[Descrição da Tarefa]". Avalie os critérios: [Critério 1], [Critério 2]. Use os níveis: [Nível 1], [Nível 2], [Nível 3]. Forneça descritores claros para cada célula. |
 | **Comunicação** | Escrever um E-mail para os Pais | Aja como professor. Escreva um e-mail [formal/amigável] aos pais sobre o projeto "[Nome do Projeto]". Inclua: objetivos, datas e como podem apoiar. Peça para traduzir para [outro idioma], se necessário. |
+
 </div>
 
 ## Navegando no Labirinto Ético e Institucional
